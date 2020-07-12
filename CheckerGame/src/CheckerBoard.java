@@ -57,17 +57,17 @@ public class CheckerBoard {
     }
 
     public void printBoard(){
-            int i,j;
-            System.out.println("  ➊ ➋ ➌ ➍ ➎ ➏ ➐ ➑  x");
-            for (i=0;i<size;i++) {
-                System.out.print((i+1) + " ");
-                for (j=0;j<size;j++) {
-                    System.out.print(board[j][i]+ " ");
-                }
-                System.out.println();
+        int i,j;
+        System.out.println("  ➊ ➋ ➌ ➍ ➎ ➏ ➐ ➑  x");
+        for (i=0;i<size;i++) {
+            System.out.print((i+1) + " ");
+            for (j=0;j<size;j++) {
+                System.out.print(board[j][i]+ " ");
             }
-            System.out.println("y");
+            System.out.println();
         }
+        System.out.println("y");
+    }
 
     public void getNextMove() throws IOException {
 
@@ -82,30 +82,30 @@ public class CheckerBoard {
 
         while (!moved) {
             try{
-            // Reads in square to move from and to.
-            System.out.println("Enter from the square you would like to move from.");
-            System.out.print("Enter as a 2-digit number. (e.g. if you were moving from");
-            System.out.println(" x=1,y=3, enter 13");
+                // Reads in square to move from and to.
+                System.out.println("Enter from the square you would like to move from.");
+                System.out.print("Enter as a 2-digit number. (e.g. if you were moving from");
+                System.out.println(" x=1,y=3, enter 13");
                 int movefrom = stdin.nextInt();
 
 
-            System.out.print("Enter from the square you would like to move to, ");
-            System.out.println("using the same convention.");
-            int moveto = stdin.nextInt();
+                System.out.print("Enter from the square you would like to move to, ");
+                System.out.println("using the same convention.");
+                int moveto = stdin.nextInt();
 
-            // Checks if the move is acceptable
-            if (validMove(movefrom,moveto)) {
-                executeMove(movefrom,moveto);
-                moved = true;
-            }
-            else
-                System.out.println("That was an invalid move, try again.");
+                // Checks if the move is acceptable
+                if (validMove(movefrom,moveto)) {
+                    executeMove(movefrom,moveto);
+                    moved = true;
+                }
+                else
+                    System.out.println("That was an invalid move, try again.");
                 printBoard();
             }
             catch(InputMismatchException ex){
                 System.out.println("Error. Must input a numeral.");
-                    printBoard();
-                    getNextMove();
+                printBoard();
+                getNextMove();
             }
         }
 

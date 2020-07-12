@@ -1,5 +1,5 @@
 
- public class Checker implements IChecker{
+public class Checker implements IChecker{
     public String color;
     public Player owner;
     public boolean status;
@@ -15,22 +15,22 @@
         this.y = y;
     }
 
-     public String getColor() {
-         return this.color;
-     }
-     public Player getOwner() {
-         return this.owner;
-     }
+    public String getColor() {
+        return this.color;
+    }
+    public Player getOwner() {
+        return this.owner;
+    }
 
-     public int getX() {
-         return this.x;
-     }
+    public int getX() {
+        return this.x;
+    }
 
-     public int getY() {
-         return this.y;
-     }
+    public int getY() {
+        return this.y;
+    }
 
-     public void move(){
+    public void move(){
         System.out.println("moved the checker");
     }
     public void jump(){
@@ -41,7 +41,7 @@
     }
 
     public static Checker createChecker(Player player,String color,int x, int y){
-            return new Checker(player,color,x,y);
+        return new Checker(player,color,x,y);
     }
 
 }
