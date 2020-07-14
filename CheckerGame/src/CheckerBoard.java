@@ -30,20 +30,20 @@ public class CheckerBoard {
             }
         }
         for (int i=1;i<size;i+=2) {
-//            board[i][1] = "◎";
-//            allCheckers.add(Checker.createChecker(player1,player1.getColor(),i,1));
+              board[i][1] = "◎";
+              allCheckers.add(Checker.createChecker(player1,player1.getColor(),i,1));
             board[i][5] = "◍";
             allCheckers.add(Checker.createChecker(player2,player2.getColor(),i,5));
-//            board[i][7] = "◍";
-//            allCheckers.add(Checker.createChecker(player2,player2.getColor(),i,7));
+              board[i][7] = "◍";
+              allCheckers.add(Checker.createChecker(player2,player2.getColor(),i,7));
         }
         for (int i=0;i<size;i+=2) {
-//            board[i][0] = "◎";
-//            allCheckers.add(Checker.createChecker(player1,player1.getColor(),i,0));
+              board[i][0] = "◎";
+              allCheckers.add(Checker.createChecker(player1,player1.getColor(),i,0));
             board[i][2] = "◎";
             allCheckers.add(Checker.createChecker(player1,player1.getColor(),i,2));
-//            board[i][6] = "◍";
-//            allCheckers.add(Checker.createChecker(player2,player2.getColor(),i,6));
+              board[i][6] = "◍";
+              allCheckers.add(Checker.createChecker(player2,player2.getColor(),i,6));
         }
     }
 
