@@ -2,10 +2,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Owner {
-    public String color;
-    public String king;
-    public String vamp;
-
+    private String color;
+    private String king;
+    private String vamp;
 
     public Player(String side){
         if(side=="red"){
@@ -20,5 +19,16 @@ public class Player extends Owner {
 
     }
 
+    public String getColor() {
+        return this.color;
+    }
+
+    public String getKing() {
+        return this.king;
+    }
+
+    public String getVamp() {
+        return this.vamp;
+    }
 
 }

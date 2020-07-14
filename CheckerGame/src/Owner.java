@@ -1,8 +1,8 @@
 abstract class Owner {
-    final String color1 = "◎";
-    final String color2 = "◍";
-    final String king1 = "☢";
-    final String king2 = "✪";
-    final String vamp2 = "✦";
-    final String vamp1 = "✧";
+    final protected String color1 = "◎";
+    final protected String color2 = "◍";
+    final protected String king1 = "☢";
+    final protected String king2 = "✪";
+    final protected String vamp2 = "✦";
+    final protected String vamp1 = "✧";
 }

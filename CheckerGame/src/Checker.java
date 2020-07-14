@@ -2,7 +2,6 @@
 public class Checker implements IChecker{
     private String color;
     private Player owner;
-    private boolean status;
     private int x;
     private int y;
 
@@ -14,9 +13,6 @@ public class Checker implements IChecker{
         this.y = y;
     }
 
-    public String getColor() {
-        return this.color;
-    }
     public Player getOwner() {
         return this.owner;
     }
@@ -47,8 +43,13 @@ public class Checker implements IChecker{
     }
 
     public KingChecker kingMe(int x, int y){
-        KingChecker king = KingChecker.createKingChecker(this.owner,this.owner.king,x,y);
+        KingChecker king = KingChecker.createKingChecker(this.owner,this.owner.getKing(),x,y);
         return king;
+    }
+
+    public VampChecker vampMe(int x, int y){
+        VampChecker vamp = VampChecker.createVampChecker(this.owner,this.owner.getVamp(),x,y);
+        return vamp;
     }
 
     public static Checker createChecker(Player player,String color,int x, int y){

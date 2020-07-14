@@ -30,21 +30,20 @@ public class CheckerBoard {
             }
         }
         for (int i=1;i<size;i+=2) {
-            board[i][1] = "◎";
-            Checker newChecker = Checker.createChecker(player1,player1.color,i,1);
-            allCheckers.add(newChecker);
+//            board[i][1] = "◎";
+//            allCheckers.add(Checker.createChecker(player1,player1.getColor(),i,1));
             board[i][5] = "◍";
-            allCheckers.add(Checker.createChecker(player2,player2.color,i,5));
-            board[i][7] = "◍";
-            allCheckers.add(Checker.createChecker(player2,player2.color,i,7));
+            allCheckers.add(Checker.createChecker(player2,player2.getColor(),i,5));
+//            board[i][7] = "◍";
+//            allCheckers.add(Checker.createChecker(player2,player2.getColor(),i,7));
         }
         for (int i=0;i<size;i+=2) {
-            board[i][0] = "◎";
-            allCheckers.add(Checker.createChecker(player1,player1.color,i,0));
+//            board[i][0] = "◎";
+//            allCheckers.add(Checker.createChecker(player1,player1.getColor(),i,0));
             board[i][2] = "◎";
-            allCheckers.add(Checker.createChecker(player1,player1.color,i,2));
-            board[i][6] = "◍";
-            allCheckers.add(Checker.createChecker(player2,player2.color,i,6));
+            allCheckers.add(Checker.createChecker(player1,player1.getColor(),i,2));
+//            board[i][6] = "◍";
+//            allCheckers.add(Checker.createChecker(player2,player2.getColor(),i,6));
         }
     }
 
@@ -123,9 +122,9 @@ public class CheckerBoard {
             return false;
 
 
-        else if (board[xFrom][yFrom]==turn.color && board[xTo][yTo]=="☐") {
+        else if (board[xFrom][yFrom]==turn.getColor() && board[xTo][yTo]=="☐") {
 
-            // Move check
+            // Regular checker move check
             if (Math.abs(xFrom-xTo)==1) {
                 if ((player1Turn == true) && (yTo - yFrom == 1))
                     return true;
@@ -133,20 +132,20 @@ public class CheckerBoard {
                     return true;
             }
 
-            // Jump check
+            // Regular checker jump check
             else if (Math.abs(xFrom-xTo)==2) {
                 if (player1Turn == true && (yTo - yFrom == 2) &&
-                        (board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "◍"||board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "✦"))
+                        (board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "◍"||board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "✪"||board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "✦"))
                     return true;
                 else if (player1Turn == false && (yTo - yFrom == -2) &&
-                        (board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "◎"||board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "✧"))
+                        (board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "◎"||board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "☢"||board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "✧"))
                     return true;
              }
         }
-        //King Checker Section
-        else if (board[xFrom][yFrom]==turn.king && board[xTo][yTo]=="☐") {
+        //King/Vamp Checker Section
+        else if ((board[xFrom][yFrom]==turn.getKing()||board[xFrom][yFrom]==turn.getVamp()) && board[xTo][yTo]=="☐") {
 
-            // Move check for king checkers
+            // Move check for king/vamp checkers
             if (Math.abs(xFrom-xTo)==1) {
                 if ((player1Turn == true) && (Math.abs(yTo - yFrom) == 1))
                     return true;
@@ -154,14 +153,14 @@ public class CheckerBoard {
                     return true;
             }
 
-
-            // Jump check for king checkers
+            //✦✧
+            // Jump check for king/vamp checkers
             else if (Math.abs(xFrom-xTo)==2) {
                 if (player1Turn == true && (Math.abs(yTo - yFrom) == 2) &&
-                        (board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "◍"||board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "✪"))
+                        (board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "◍"||board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "✪"||board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "✦"))
                     return true;
                 else if (player1Turn == false && (Math.abs(yTo - yFrom) == 2) &&
-                        (board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "◎"||board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "☢"))
+                        (board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "◎"||board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "☢"||board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "✧"))
                     return true;
              }
         }
@@ -187,23 +186,43 @@ public class CheckerBoard {
 
 
         // If jump, updates the board properly
-        if (Math.abs(xTo - xFrom) == 2) {
+        if ((Math.abs(xTo - xFrom) == 2)&& board[xTo][yTo]==turn.getVamp()){
+            board[(xFrom+xTo)/2][(yFrom+yTo)/2] = turn.getColor();
+            Checker turned = selectedChecker.shift((xFrom+xTo)/2,(yFrom+yTo)/2).get();
+            allCheckers.set(allCheckers.indexOf(turned),Checker.createChecker(turn,turn.getColor(),(xFrom+xTo)/2,(yFrom+yTo)/2));
+        }
+        else if (Math.abs(xTo - xFrom) == 2) {
             board[(xFrom+xTo)/2][(yFrom+yTo)/2] = "☐";
             Checker jumped = selectedChecker.shift((xFrom+xTo)/2,(yFrom+yTo)/2).get();
             allCheckers.remove(jumped);
         }
+
         //Upgrade checker to king checker if applicable
         if((moveTo == 11||moveTo == 31||moveTo == 51||moveTo == 71)&& !player1Turn){
+            KingChecker king = movedChecker.kingMe(xTo,yTo);
             allCheckers.remove(movedChecker);
-            Checker king = KingChecker.createKingChecker(turn,turn.king,xTo,yTo);
             allCheckers.add(king);
-            board[xTo][yTo] = turn.king;
+            board[xTo][yTo] = turn.getKing();
         }
         else if((moveTo == 28||moveTo == 48||moveTo == 68||moveTo == 88)&& player1Turn){
             KingChecker king = movedChecker.kingMe(xTo,yTo);
             allCheckers.remove(movedChecker);
             allCheckers.add(king);
-            board[xTo][yTo] = turn.king;
+            board[xTo][yTo] = turn.getKing();
+        }
+
+        //Upgrade king checker to vamp checker if applicable
+        if((moveTo == 11||moveTo == 31||moveTo == 51||moveTo == 71)&& player1Turn && board[xTo][yTo]==turn.getKing()){
+            VampChecker vamp = movedChecker.vampMe(xTo,yTo);
+            allCheckers.remove(movedChecker);
+            allCheckers.add(vamp);
+            board[xTo][yTo] = turn.getVamp();
+        }
+        else if((moveTo == 28||moveTo == 48||moveTo == 68||moveTo == 88)&& !player1Turn && board[xTo][yTo]==turn.getKing()){
+            VampChecker vamp = movedChecker.vampMe(xTo,yTo);
+            allCheckers.remove(movedChecker);
+            allCheckers.add(vamp);
+            board[xTo][yTo] = turn.getVamp();
         }
 
     }
@@ -214,9 +233,9 @@ public class CheckerBoard {
 
     public String winner() {
         if (findAmount.anyLeft(player2))
-            return "red";
-        else
             return "black";
+        else
+            return "red";
     }
 
     LambdaCheck  findAmount = (Player owner) -> {
