@@ -20,20 +20,11 @@ public class CheckerBoard {
         for(int i=0;i<size;i++){
             if(i%2==1){
                 for(int j=0;j<size;j++) {
-
-                    if(j%2==1){
-                        board[i][j] = "☐";
-                    }else{
-                        board[i][j] = "◼";
-                    }
+                    board[i][j] = j%2==1?"☐":"◼";
                 }
             } else{
                 for(int j=0;j<size;j++){
-                    if (j % 2 == 1) {
-                        board[i][j] = "◼";
-                    }else{
-                        board[i][j] = "☐";
-                    }
+                    board[i][j] = j%2==1?"◼":"☐";
                 }
             }
         }
@@ -69,7 +60,7 @@ public class CheckerBoard {
         System.out.println("y");
     }
 
-    public void getNextMove() throws IOException {
+    public void nextMove() throws IOException {
 
         Scanner stdin = new Scanner(System.in);
 
@@ -82,30 +73,28 @@ public class CheckerBoard {
 
         while (!moved) {
             try{
-                // Reads in square to move from and to.
-                System.out.println("Enter from the square you would like to move from.");
-                System.out.print("Enter as a 2-digit number. (e.g. if you were moving from");
-                System.out.println(" x=1,y=3, enter 13");
-                int movefrom = stdin.nextInt();
+                // Reads the chosen checker and its destination.
+                System.out.println("Enter the coordinates of the checker you want to move.");
+                System.out.print("For example, entering 37 (x=3,y=7) would move the most right and front red checker");
+                int moveFrom = stdin.nextInt();
 
 
-                System.out.print("Enter from the square you would like to move to, ");
-                System.out.println("using the same convention.");
-                int moveto = stdin.nextInt();
+                System.out.print("Please enter the coordinates you would like the selected checker to move to: ");
+                int moveTo = stdin.nextInt();
 
                 // Checks if the move is acceptable
-                if (validMove(movefrom,moveto)) {
-                    executeMove(movefrom,moveto);
+                if (validMove(moveFrom,moveTo)) {
+                    executeMove(moveFrom,moveTo);
                     moved = true;
                 }
                 else
-                    System.out.println("That was an invalid move, try again.");
-                printBoard();
+                    System.out.println("Invalid move. Please try again.");
+                    printBoard();
             }
             catch(InputMismatchException ex){
                 System.out.println("Error. Must input a numeral.");
                 printBoard();
-                getNextMove();
+                nextMove();
             }
         }
 
@@ -118,71 +107,77 @@ public class CheckerBoard {
 
 
 
-    public boolean validMove(int movefrom, int moveto) {
+    public boolean validMove(int moveFrom, int moveTo) {
         Player turn = player1Turn==true? player1:player2;
 
         // Fancy way to get the coordinates
-        int xfrom = movefrom/10 - 1;
-        int yfrom = movefrom%10 - 1;
-        int xto = moveto/10 - 1;
-        int yto = moveto%10 - 1;
+        int xFrom = moveFrom/10 - 1;
+        int yFrom = moveFrom%10 - 1;
+        int xTo = moveTo/10 - 1;
+        int yTo = moveTo%10 - 1;
 
         // Make sure parameters are in bound
-        if (xfrom < 0 || xfrom > 7 || yfrom < 0 || yfrom > 7 ||
-                xto < 0 || xto > 7 || yto < 0 || yto > 7)
+        if (xFrom < 0 || xFrom > 7 || yFrom < 0 || yFrom > 7 ||
+                xTo < 0 || xTo > 7 || yTo < 0 || yTo > 7)
             return false;
 
 
-        else if (board[xfrom][yfrom]==turn.color && board[xto][yto]=="☐") {
+        else if (board[xFrom][yFrom]==turn.color && board[xTo][yTo]=="☐") {
 
             // Move check
-            if (Math.abs(xfrom-xto)==1) {
-                if ((player1Turn == true) && (yto - yfrom == 1))
+            if (Math.abs(xFrom-xTo)==1) {
+                if ((player1Turn == true) && (yTo - yFrom == 1))
                     return true;
-                else if ((player1Turn == false) && (yto - yfrom == -1))
+                else if ((player1Turn == false) && (yTo - yFrom == -1))
                     return true;
             }
 
+            //make y coordinates absolute for king and vamp checkers!!
 
             // Jump check
-            else if (Math.abs(xfrom-xto)==2) {
-                if (player1Turn == true && (yto - yfrom == 2) &&
-                        board[(xfrom+xto)/2][(yfrom+yto)/2] == "◍")
+            else if (Math.abs(xFrom-xTo)==2) {
+                if (player1Turn == true && (yTo - yFrom == 2) &&
+                        (board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "◍"||board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "✦"))
                     return true;
-                else if (player1Turn == false && (yto - yfrom == -2) &&
-                        board[(xfrom+xto)/2][(yfrom+yto)/2] == "◎")
+                else if (player1Turn == false && (yTo - yFrom == -2) &&
+                        (board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "◎"||board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "✧"))
                     return true;
-            }
+             }
         }
 
         return false;
     }
 
-    public void executeMove(int movefrom, int moveto) {
+    public void executeMove(int moveFrom, int moveTo) {
         Player turn = player1Turn==true? player1:player2;
 
-        int xfrom = movefrom/10 - 1;
-        int yfrom = movefrom%10 - 1;
-        int xto = moveto/10 - 1;
-        int yto = moveto%10 - 1;
+        int xFrom = moveFrom/10 - 1;
+        int yFrom = moveFrom%10 - 1;
+        int xTo = moveTo/10 - 1;
+        int yTo = moveTo%10 - 1;
+
+        //Updates checker and board
+        Checker movedChecker = selectedChecker.shift(xFrom,yFrom).get();
+        movedChecker.setX(xTo);
+        movedChecker.setY(yTo);
+        String newLocation = board[xFrom][yFrom];
+        board[xTo][yTo] = newLocation;
+        board[xFrom][yFrom] = "☐";
+
 
         // If jump, updates the board properly
-        board[xfrom][yfrom] = "☐";
-        board[xto][yto] = turn.color;
-        if (Math.abs(xto - xfrom) == 2) {
-            board[(xfrom+xto)/2][(yfrom+yto)/2] = "☐";
-
-            Optional<Checker> jumped = removeChecker.remove((xfrom+xto)/2,(yfrom+yto)/2);
+        if (Math.abs(xTo - xFrom) == 2) {
+            board[(xFrom+xTo)/2][(yFrom+yTo)/2] = "☐";
+            Checker jumped = selectedChecker.shift((xFrom+xTo)/2,(yFrom+yTo)/2).get();
             allCheckers.remove(jumped);
         }
-
     }
 
     public boolean gameOver() {
         return (!findAmount.anyLeft(player1) || !findAmount.anyLeft(player2));
     }
 
-    public String winnerIs() {
+    public String winner() {
         if (findAmount.anyLeft(player2))
             return "red";
         else
@@ -195,19 +190,20 @@ public class CheckerBoard {
         return num;
     };
 
-    LambdaDelete  removeChecker = (int jumpedX, int jumpedY) -> {
+
+    LambdaFind  selectedChecker = (int jumpedX, int jumpedY) -> {
         Optional<Checker> jumped = allCheckers.stream()
                 .filter(x->x.getX()==(jumpedX))
                 .filter(x->x.getY()==(jumpedY))
-                .findFirst();
+                .findAny();
+
         return jumped;
     };
-
 
 }
 interface LambdaCheck{
     public boolean anyLeft(Player owner);
 }
-interface LambdaDelete{
-    public Optional<Checker> remove(int x,int y);
+interface LambdaFind{
+    public Optional<Checker> shift(int x,int y);
 }

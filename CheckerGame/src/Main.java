@@ -13,14 +13,13 @@ public class Main {
         while (!board.gameOver()) {
             //Try a move and update the board
             try {
-                board.getNextMove();
+                board.nextMove();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            board.printBoard();
         }
         // Game over! Who won???
-        System.out.println("The winner is " + board.winnerIs());
+        System.out.println("Congratulations! The winner is " + board.winner());
 
     }
 }

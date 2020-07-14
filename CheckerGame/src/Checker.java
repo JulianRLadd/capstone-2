@@ -30,6 +30,22 @@ public class Checker implements IChecker{
         return this.y;
     }
 
+
+    public void setX(int newX) {
+        this.x = newX;
+    }
+
+    public void setY(int newY) {
+        this.y = newY;
+    }
+
+    public void info(){
+        System.out.println("Color:"+this.color);
+        System.out.println("Owner:"+this.owner);
+        System.out.println("X:"+this.x);
+        System.out.println("Y:"+this.y);
+
+    }
     public void move(){
         System.out.println("moved the checker");
     }
