@@ -75,7 +75,7 @@ public class CheckerBoard {
             try{
                 // Reads the chosen checker and its destination.
                 System.out.println("Enter the coordinates of the checker you want to move.");
-                System.out.print("For example, entering 37 (x=3,y=7) would move the most right and front red checker");
+                System.out.print("For example, entering 37 (x=3,y=7) would move the most right and front red checker: ");
                 int moveFrom = stdin.nextInt();
 
 
@@ -132,8 +132,6 @@ public class CheckerBoard {
                     return true;
             }
 
-            //make y coordinates absolute for king and vamp checkers!!
-
             // Jump check
             else if (Math.abs(xFrom-xTo)==2) {
                 if (player1Turn == true && (yTo - yFrom == 2) &&
@@ -141,6 +139,28 @@ public class CheckerBoard {
                     return true;
                 else if (player1Turn == false && (yTo - yFrom == -2) &&
                         (board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "◎"||board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "✧"))
+                    return true;
+             }
+        }
+        //King Checker Section
+        else if (board[xFrom][yFrom]==turn.king && board[xTo][yTo]=="☐") {
+
+            // Move check for king checkers
+            if (Math.abs(xFrom-xTo)==1) {
+                if ((player1Turn == true) && (Math.abs(yTo - yFrom) == 1))
+                    return true;
+                else if ((player1Turn == false) && (Math.abs(yTo - yFrom) == 1))
+                    return true;
+            }
+
+
+            // Jump check for king checkers
+            else if (Math.abs(xFrom-xTo)==2) {
+                if (player1Turn == true && (Math.abs(yTo - yFrom) == 2) &&
+                        (board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "◍"||board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "✪"))
+                    return true;
+                else if (player1Turn == false && (Math.abs(yTo - yFrom) == 2) &&
+                        (board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "◎"||board[(xFrom+xTo)/2][(yFrom+yTo)/2] == "☢"))
                     return true;
              }
         }
@@ -171,6 +191,20 @@ public class CheckerBoard {
             Checker jumped = selectedChecker.shift((xFrom+xTo)/2,(yFrom+yTo)/2).get();
             allCheckers.remove(jumped);
         }
+
+        if((moveTo == 11||moveTo == 31||moveTo == 51||moveTo == 71)&& !player1Turn){
+            allCheckers.remove(movedChecker);
+            Checker king = KingChecker.createKingChecker(turn,turn.king,xTo,yTo);
+            allCheckers.add(king);
+            board[xTo][yTo] = turn.king;
+        }
+        else if((moveTo == 28||moveTo == 48||moveTo == 68||moveTo == 88)&& player1Turn){
+            allCheckers.remove(movedChecker);
+            Checker king = KingChecker.createKingChecker(turn,turn.king,xTo,yTo);
+            allCheckers.add(king);
+            board[xTo][yTo] = turn.king;
+        }
+
     }
 
     public boolean gameOver() {

@@ -10,7 +10,6 @@ public class Checker implements IChecker{
     public Checker(Player player, String color, int x, int y){
         this.color = color;
         this.owner = player;
-        this.status = true;
         this.x = x;
         this.y = y;
     }
