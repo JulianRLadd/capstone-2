@@ -4,12 +4,13 @@ import java.util.*;
 
 public class CheckerBoard {
     private int size = 8;
-    public String [][]board;
-    public Player player1;
+    private String [][]board;
+    private Player player1;
 
-    public Player player2;
-    public List<Checker> allCheckers;
-    public boolean player1Turn;
+    private Player player2;
+    private List<Checker> allCheckers;
+    private boolean player1Turn;
+
 
     public CheckerBoard(){
         player1Turn = true;
@@ -191,7 +192,7 @@ public class CheckerBoard {
             Checker jumped = selectedChecker.shift((xFrom+xTo)/2,(yFrom+yTo)/2).get();
             allCheckers.remove(jumped);
         }
-
+        //Upgrade checker to king checker if applicable
         if((moveTo == 11||moveTo == 31||moveTo == 51||moveTo == 71)&& !player1Turn){
             allCheckers.remove(movedChecker);
             Checker king = KingChecker.createKingChecker(turn,turn.king,xTo,yTo);
@@ -199,8 +200,8 @@ public class CheckerBoard {
             board[xTo][yTo] = turn.king;
         }
         else if((moveTo == 28||moveTo == 48||moveTo == 68||moveTo == 88)&& player1Turn){
+            KingChecker king = movedChecker.kingMe(xTo,yTo);
             allCheckers.remove(movedChecker);
-            Checker king = KingChecker.createKingChecker(turn,turn.king,xTo,yTo);
             allCheckers.add(king);
             board[xTo][yTo] = turn.king;
         }

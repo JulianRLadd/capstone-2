@@ -1,4 +1,3 @@
 public interface IChecker {
-    public void move();
-    public void kingMe();
+    public Checker kingMe(int x,int y);
 }

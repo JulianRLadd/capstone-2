@@ -1,14 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player {
-    public String color1 = "◎";
-    public String color2 = "◍";
-    private String king1 = "☢";
-    private String king2 = "✪";
-    private String vamp2 = "✦";
-    private String vamp1 = "✧";
-
+public class Player extends Owner {
     public String color;
     public String king;
     public String vamp;
@@ -27,10 +20,5 @@ public class Player {
 
     }
 
-    public void move(){
-        System.out.println("moved the checker");
-    }
-    public void jump(){
-        System.out.println("Jumped the enemy checker");
-    }
+
 }

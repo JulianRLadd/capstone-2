@@ -1,10 +1,10 @@
 
 public class Checker implements IChecker{
-    public String color;
-    public Player owner;
-    public boolean status;
-    public int x;
-    public int y;
+    private String color;
+    private Player owner;
+    private boolean status;
+    private int x;
+    private int y;
 
 
     public Checker(Player player, String color, int x, int y){
@@ -45,14 +45,10 @@ public class Checker implements IChecker{
         System.out.println("Y:"+this.y);
 
     }
-    public void move(){
-        System.out.println("moved the checker");
-    }
-    public void jump(){
-        System.out.println("Jumped the enemy checker");
-    }
-    public void kingMe(){
-        System.out.println("Kinged the checker");
+
+    public KingChecker kingMe(int x, int y){
+        KingChecker king = KingChecker.createKingChecker(this.owner,this.owner.king,x,y);
+        return king;
     }
 
     public static Checker createChecker(Player player,String color,int x, int y){
